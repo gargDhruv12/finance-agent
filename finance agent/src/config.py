@@ -17,6 +17,7 @@ def _as_bool(value: str | None, default: bool = True) -> bool:
 @dataclass(frozen=True)
 class Settings:
     gemini_api_key: str | None
+    gemini_model: str
     dry_run: bool
     sender_email: str
     payment_base_url: str
@@ -27,6 +28,7 @@ def load_settings() -> Settings:
     _load_env_file(PROJECT_ROOT / ".env")
     return Settings(
         gemini_api_key=os.getenv("GEMINI_API_KEY") or None,
+        gemini_model=os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
         dry_run=_as_bool(os.getenv("DRY_RUN"), default=True),
         sender_email=os.getenv("SENDER_EMAIL", "finance@example.com"),
         payment_base_url=os.getenv("PAYMENT_BASE_URL", "https://payments.example.com/pay"),

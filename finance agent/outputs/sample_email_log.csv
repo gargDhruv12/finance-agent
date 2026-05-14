@@ -1,5 +1,5 @@
-timestamp,invoice_no,client_name,contact_email,amount,currency,due_date,days_overdue,stage,tone,status,subject,body,reason
-2026-05-14T19:23:19.235051,INV-2026-001,Kapoor Textiles,rajesh.kapoor@example.com,45000.0,INR,2026-05-10,4,1,Warm & Friendly,DRY_RUN,Quick Reminder - Invoice #INV-2026-001 | INR 45000 Due,"Hi Rajesh Kapoor,
+timestamp,invoice_no,client_name,contact_email,amount,currency,due_date,days_overdue,stage,tone,status,generation_method,subject,body,reason
+2026-05-14T20:08:52.367202,INV-2026-001,Kapoor Textiles,rajesh.kapoor@example.com,45000.0,INR,2026-05-10,4,1,Warm & Friendly,DRY_RUN,TEMPLATE_FALLBACK,Quick Reminder - Invoice #INV-2026-001 | INR 45000 Due,"Hi Rajesh Kapoor,
 
 I hope you are doing well. This is a friendly reminder for Kapoor Textiles that Invoice #INV-2026-001 for INR 45000 was due on 2026-05-10 and is now 4 days overdue.
 
@@ -7,7 +7,7 @@ If this has already been processed, please disregard this note. Otherwise, you c
 
 Thank you,
 Finance Team",Email generated and logged in dry-run mode.
-2026-05-14T19:23:19.236048,INV-2026-002,BluePeak Analytics,ananya.mehta@example.com,87500.0,INR,2026-05-03,11,2,Polite but Firm,DRY_RUN,Payment Confirmation Requested - Invoice #INV-2026-002,"Hi Ananya Mehta,
+2026-05-14T20:08:52.373085,INV-2026-002,BluePeak Analytics,ananya.mehta@example.com,87500.0,INR,2026-05-03,11,2,Polite but Firm,DRY_RUN,TEMPLATE_FALLBACK,Payment Confirmation Requested - Invoice #INV-2026-002,"Hi Ananya Mehta,
 
 Our records show that BluePeak Analytics's Invoice #INV-2026-002 for INR 87500, due on 2026-05-03, remains unpaid and is now 11 days overdue.
 
@@ -15,7 +15,7 @@ Please confirm the expected payment date, or use this payment link to settle the
 
 Regards,
 Finance Team",Email generated and logged in dry-run mode.
-2026-05-14T19:23:19.236048,INV-2026-003,Northstar Retail,vikram.shah@example.com,120000.0,INR,2026-04-26,18,3,Formal & Serious,DRY_RUN,IMPORTANT: Outstanding Payment - Invoice #INV-2026-003 (18 Days Overdue),"Dear Vikram Shah,
+2026-05-14T20:08:52.377085,INV-2026-003,Northstar Retail,vikram.shah@example.com,120000.0,INR,2026-04-26,18,3,Formal & Serious,DRY_RUN,TEMPLATE_FALLBACK,IMPORTANT: Outstanding Payment - Invoice #INV-2026-003 (18 Days Overdue),"Dear Vikram Shah,
 
 Despite earlier follow-ups, Northstar Retail's Invoice #INV-2026-003 for INR 120000, due on 2026-04-26, remains unpaid and is now 18 days overdue.
 
@@ -23,7 +23,7 @@ We request your immediate attention. Continued non-payment may impact credit ter
 
 Regards,
 Finance Team",Email generated and logged in dry-run mode.
-2026-05-14T19:23:19.236048,INV-2026-004,Orchid Logistics,priya.nair@example.com,64000.0,INR,2026-04-19,25,4,Stern & Urgent,DRY_RUN,FINAL NOTICE - Invoice #INV-2026-004 - Immediate Action Required,"Dear Priya Nair,
+2026-05-14T20:08:52.381088,INV-2026-004,Orchid Logistics,priya.nair@example.com,64000.0,INR,2026-04-19,25,4,Stern & Urgent,DRY_RUN,TEMPLATE_FALLBACK,FINAL NOTICE - Invoice #INV-2026-004 - Immediate Action Required,"Dear Priya Nair,
 
 This is the final reminder for Orchid Logistics's Invoice #INV-2026-004 for INR 64000. The invoice was due on 2026-04-19 and is now 25 days overdue.
 
@@ -31,5 +31,5 @@ Please pay immediately using https://payments.example.com/pay/INV-2026-004 or co
 
 Regards,
 Finance Team",Email generated and logged in dry-run mode.
-2026-05-14T19:23:19.237072,INV-2026-005,Summit Foods,amit.verma@example.com,98000.0,INR,2026-04-10,34,5,Escalation Flag,ESCALATED,,,Invoice is over 30 days overdue; flagged for finance/legal review.
-2026-05-14T19:23:19.237072,INV-2026-006,FreshCart Labs,neha.iyer@example.com,30000.0,INR,2026-05-20,0,0,Not overdue,SKIPPED,,,Invoice is not overdue.
+2026-05-14T20:08:52.386089,INV-2026-005,Summit Foods,amit.verma@example.com,98000.0,INR,2026-04-10,34,5,Escalation Flag,ESCALATED,NO_EMAIL_ESCALATED,,,Invoice is over 30 days overdue; flagged for finance/legal review.
+2026-05-14T20:08:52.389943,INV-2026-006,FreshCart Labs,neha.iyer@example.com,30000.0,INR,2026-05-20,0,0,Not overdue,SKIPPED,NO_EMAIL,,,Invoice is not overdue.

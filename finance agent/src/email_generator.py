@@ -8,16 +8,25 @@ from .validators import validate_email_personalization
 
 
 class EmailGenerator:
-    def __init__(self, gemini_api_key: str | None = None) -> None:
+    def __init__(self, gemini_api_key: str | None = None, gemini_model: str = "gemini-2.0-flash") -> None:
         self.gemini_api_key = gemini_api_key
+        self.gemini_model = gemini_model
+        self.last_generation_method = "NONE"
+        self._gemini_disabled_reason: str | None = None
 
     def generate(self, invoice: InvoiceRecord, decision: EscalationDecision) -> EmailDraft:
         if not decision.should_email:
             raise ValueError("Email generation requested for a non-email escalation decision.")
 
-        draft = self._generate_with_gemini(invoice, decision) if self.gemini_api_key else None
+        self.last_generation_method = "NONE"
+        draft = (
+            self._generate_with_gemini(invoice, decision)
+            if self.gemini_api_key and not self._gemini_disabled_reason
+            else None
+        )
         if draft is None:
             draft = self._generate_template_email(invoice, decision)
+            self.last_generation_method = "TEMPLATE_FALLBACK"
 
         missing = validate_email_personalization(invoice, decision, draft)
         if missing:
@@ -35,15 +44,22 @@ class EmailGenerator:
             return None
 
         genai.configure(api_key=self.gemini_api_key)
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel(self.gemini_model)
         prompt = self._build_prompt(invoice, decision)
-        response = model.generate_content(prompt)
+        try:
+            response = model.generate_content(prompt)
+        except Exception as exc:
+            self._gemini_disabled_reason = _summarize_gemini_error(exc, self.gemini_model)
+            print(f"Gemini unavailable: {self._gemini_disabled_reason}. Using TEMPLATE_FALLBACK.")
+            return None
         raw_text = response.text.strip()
         if raw_text.startswith("```"):
             raw_text = raw_text.strip("`")
             raw_text = raw_text.removeprefix("json").strip()
         payload = json.loads(raw_text)
-        return EmailDraft.model_validate(payload)
+        draft = EmailDraft.model_validate(payload)
+        self.last_generation_method = "GEMINI"
+        return draft
 
     def _build_prompt(self, invoice: InvoiceRecord, decision: EscalationDecision) -> str:
         return dedent(
@@ -132,3 +148,11 @@ class EmailGenerator:
             stage=decision.stage,
         )
 
+
+def _summarize_gemini_error(exc: Exception, model_name: str) -> str:
+    message = str(exc)
+    if "429" in message or "quota" in message.lower():
+        return f"quota exceeded for model '{model_name}'"
+    if "404" in message or "not found" in message.lower():
+        return "configured model is unavailable for this API key"
+    return exc.__class__.__name__

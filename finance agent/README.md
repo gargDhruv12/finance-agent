@@ -58,10 +58,12 @@ For free-tier LLM generation, add a Gemini API key to `.env`:
 
 ```env
 GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_MODEL=gemini-2.0-flash
 DRY_RUN=true
 ```
 
 If no Gemini key is configured, the app still runs end-to-end using deterministic email templates.
+If your Gemini account does not support the default model, update `GEMINI_MODEL` in `.env` to a model listed for your key in Google AI Studio.
 
 ## Run The Agent
 
@@ -138,4 +140,3 @@ The tests verify escalation-stage boundaries, the 30+ day escalation cap, and re
 4. Show Stage 1 through Stage 4 generated dry-run emails.
 5. Show the 30+ day invoice marked `ESCALATED` with no email body.
 6. Optionally open the Streamlit dashboard.
-

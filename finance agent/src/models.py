@@ -82,6 +82,7 @@ class AuditEntry(BaseModel):
     stage: int
     tone: str
     status: SendStatus
+    generation_method: str
     subject: str | None = None
     body: str | None = None
     reason: str

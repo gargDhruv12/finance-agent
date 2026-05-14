@@ -2,7 +2,7 @@
 
 ## LLM Chosen
 
-Primary model: **Gemini 1.5 Flash via Google Gemini API**.
+Primary model: **Gemini 2.0 Flash via Google Gemini API**.
 
 Rationale:
 
@@ -14,6 +14,7 @@ Rationale:
 Fallback:
 
 - If no `GEMINI_API_KEY` is available, the project uses deterministic stage-based templates.
+- If the configured Gemini model is unavailable for the current API key, the project logs the issue and uses deterministic stage-based templates.
 - This keeps the demo reliable and cost-free while preserving the same validation, dry-run, and audit flow.
 
 ## Agent Framework
@@ -78,4 +79,3 @@ Each audit row includes timestamp, invoice details, stage, tone, send status, su
 - Template fallback avoids unnecessary API calls.
 - Dry-run mode avoids paid email infrastructure.
 - The pipeline can later add caching for repeated LLM generations during development.
-

@@ -18,6 +18,7 @@ class InvoiceWorkflowState(TypedDict, total=False):
     subject: str | None
     body: str | None
     reason: str
+    generation_method: str
 
 
 def run_invoice_workflow(
@@ -59,6 +60,7 @@ def _build_langgraph_workflow(generator: EmailGenerator, sender: EmailSender) ->
         state["body"] = None
         state["status"] = SendStatus.SKIPPED
         state["reason"] = "Invoice is not overdue."
+        state["generation_method"] = "NO_EMAIL"
         return state
 
     def escalate_node(state: InvoiceWorkflowState) -> InvoiceWorkflowState:
@@ -67,6 +69,7 @@ def _build_langgraph_workflow(generator: EmailGenerator, sender: EmailSender) ->
         state["body"] = None
         state["status"] = SendStatus.ESCALATED
         state["reason"] = "Invoice is over 30 days overdue; flagged for finance/legal review."
+        state["generation_method"] = "NO_EMAIL_ESCALATED"
         return state
 
     def generate_node(state: InvoiceWorkflowState) -> InvoiceWorkflowState:
@@ -76,6 +79,7 @@ def _build_langgraph_workflow(generator: EmailGenerator, sender: EmailSender) ->
         state["subject"] = draft.subject
         state["body"] = draft.body
         state["status"] = status
+        state["generation_method"] = generator.last_generation_method
         state["reason"] = (
             "Email generated and logged in dry-run mode."
             if status == SendStatus.DRY_RUN
@@ -115,6 +119,7 @@ def _run_sequential_workflow(
         state["body"] = None
         state["status"] = SendStatus.SKIPPED
         state["reason"] = "Invoice is not overdue."
+        state["generation_method"] = "NO_EMAIL"
         return state
 
     if decision.requires_manual_review:
@@ -123,6 +128,7 @@ def _run_sequential_workflow(
         state["body"] = None
         state["status"] = SendStatus.ESCALATED
         state["reason"] = "Invoice is over 30 days overdue; flagged for finance/legal review."
+        state["generation_method"] = "NO_EMAIL_ESCALATED"
         return state
 
     draft = generator.generate(invoice, decision)
@@ -131,10 +137,10 @@ def _run_sequential_workflow(
     state["subject"] = draft.subject
     state["body"] = draft.body
     state["status"] = status
+    state["generation_method"] = generator.last_generation_method
     state["reason"] = (
         "Email generated and logged in dry-run mode."
         if status == SendStatus.DRY_RUN
         else "Email sent."
     )
     return state
-

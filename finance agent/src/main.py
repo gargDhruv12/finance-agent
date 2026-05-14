@@ -16,7 +16,7 @@ from .workflow import run_invoice_workflow
 def process_invoices(input_path: Path, today: date | None = None) -> list[AuditEntry]:
     settings = load_settings()
     invoices = load_invoice_records(input_path)
-    generator = EmailGenerator(settings.gemini_api_key)
+    generator = EmailGenerator(settings.gemini_api_key, settings.gemini_model)
     sender = EmailSender(dry_run=settings.dry_run)
     entries: list[AuditEntry] = []
 
@@ -41,6 +41,7 @@ def process_invoices(input_path: Path, today: date | None = None) -> list[AuditE
                 stage=decision.stage,
                 tone=decision.tone,
                 status=status,
+                generation_method=state["generation_method"],
                 subject=subject,
                 body=body,
                 reason=reason,
@@ -75,7 +76,7 @@ def main() -> None:
     for entry in entries:
         print(
             f"{entry.invoice_no}: stage={entry.stage}, days_overdue={entry.days_overdue}, "
-            f"status={entry.status.value}"
+            f"status={entry.status.value}, generation={entry.generation_method}"
         )
 
 
