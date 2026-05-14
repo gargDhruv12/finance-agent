@@ -1,6 +1,6 @@
 [
   {
-    "timestamp": "2026-05-14T21:20:28.894393",
+    "timestamp": "2026-05-14T21:25:55.033532",
     "invoice_no": "INV-2026-001",
     "client_name": "Kapoor Textiles",
     "contact_email": "rajesh.kapoor@example.com",
@@ -19,7 +19,7 @@
     "reason": "Email generated and logged in dry-run mode."
   },
   {
-    "timestamp": "2026-05-14T21:20:28.895391",
+    "timestamp": "2026-05-14T21:25:55.035534",
     "invoice_no": "INV-2026-002",
     "client_name": "BluePeak Analytics",
     "contact_email": "ananya.mehta@example.com",
@@ -38,7 +38,7 @@
     "reason": "Email generated and logged in dry-run mode."
   },
   {
-    "timestamp": "2026-05-14T21:20:28.896392",
+    "timestamp": "2026-05-14T21:25:55.036039",
     "invoice_no": "INV-2026-003",
     "client_name": "Northstar Retail",
     "contact_email": "vikram.shah@example.com",
@@ -57,7 +57,7 @@
     "reason": "Email generated and logged in dry-run mode."
   },
   {
-    "timestamp": "2026-05-14T21:20:28.896898",
+    "timestamp": "2026-05-14T21:25:55.037274",
     "invoice_no": "INV-2026-004",
     "client_name": "Orchid Logistics",
     "contact_email": "priya.nair@example.com",
@@ -76,7 +76,7 @@
     "reason": "Email generated and logged in dry-run mode."
   },
   {
-    "timestamp": "2026-05-14T21:20:28.896898",
+    "timestamp": "2026-05-14T21:25:55.037274",
     "invoice_no": "INV-2026-005",
     "client_name": "Summit Foods",
     "contact_email": "amit.verma@example.com",
@@ -95,7 +95,7 @@
     "reason": "Invoice is over 30 days overdue; flagged for finance/legal review."
   },
   {
-    "timestamp": "2026-05-14T21:20:28.896898",
+    "timestamp": "2026-05-14T21:25:55.037274",
     "invoice_no": "INV-2026-006",
     "client_name": "FreshCart Labs",
     "contact_email": "neha.iyer@example.com",
