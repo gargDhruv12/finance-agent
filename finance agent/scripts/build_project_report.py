@@ -338,18 +338,27 @@ def build() -> None:
     ]:
         add_bullet(document, item)
 
-    document.add_heading("10. Future Improvements", level=1)
+    document.add_heading("10. Implemented Enhancements", level=1)
     for item in [
-        "Add a human approval queue before real email sending.",
-        "Integrate a verified SMTP, SendGrid, or Mailgun sender after domain authentication.",
-        "Add scheduler support for daily or weekly automated invoice scans.",
-        "Add caching for LLM generations during development to reduce cost.",
-        "Add LangSmith or Langfuse tracing if a free or approved setup is available.",
-        "Expand the dashboard with filters, review comments, and manager assignment workflow.",
+        "Human approval queue before real email sending.",
+        "Optional SMTP sender guarded by dry-run and approval settings.",
+        "APScheduler support for recurring invoice scans.",
+        "SQLite LLM response caching to reduce repeated Gemini calls.",
+        "Local tracing plus optional LangSmith hooks.",
+        "Expanded dashboard with filters, approval actions, generated email review, and trace visibility.",
     ]:
         add_bullet(document, item)
 
-    document.add_heading("11. Conclusion", level=1)
+    document.add_heading("11. Next Production Steps", level=1)
+    for item in [
+        "Configure a verified sender domain with SPF, DKIM, and DMARC before real client sends.",
+        "Add authentication and role-based access if the dashboard is deployed beyond local use.",
+        "Connect the input source to the finance team's actual ERP, accounting system, or Google Sheet.",
+        "Add PII redaction before enabling hosted tracing in production.",
+    ]:
+        add_bullet(document, item)
+
+    document.add_heading("12. Conclusion", level=1)
     document.add_paragraph(
         "The Finance Credit Follow-Up Email Agent provides a practical, auditable prototype for automating overdue "
         "invoice follow-ups. It satisfies the internship task requirements while keeping real-world safety concerns "
@@ -364,4 +373,3 @@ def build() -> None:
 
 if __name__ == "__main__":
     build()
-

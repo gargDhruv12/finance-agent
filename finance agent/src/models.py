@@ -12,6 +12,8 @@ class SendStatus(str, Enum):
     SENT = "SENT"
     ESCALATED = "ESCALATED"
     SKIPPED = "SKIPPED"
+    PENDING_APPROVAL = "PENDING_APPROVAL"
+    REJECTED = "REJECTED"
     FAILED = "FAILED"
 
 
@@ -83,6 +85,8 @@ class AuditEntry(BaseModel):
     tone: str
     status: SendStatus
     generation_method: str
+    approval_status: str = "NOT_REQUIRED"
+    assigned_to: str | None = None
     subject: str | None = None
     body: str | None = None
     reason: str

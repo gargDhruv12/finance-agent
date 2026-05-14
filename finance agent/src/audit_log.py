@@ -31,6 +31,7 @@ def write_sqlite(entries: list[AuditEntry], db_path: str | Path) -> None:
     path = Path(db_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     with sqlite3.connect(path) as connection:
+        connection.execute("DROP TABLE IF EXISTS audit_log")
         connection.execute(
             """
             CREATE TABLE IF NOT EXISTS audit_log (
@@ -45,6 +46,9 @@ def write_sqlite(entries: list[AuditEntry], db_path: str | Path) -> None:
                 stage INTEGER NOT NULL,
                 tone TEXT NOT NULL,
                 status TEXT NOT NULL,
+                generation_method TEXT NOT NULL,
+                approval_status TEXT NOT NULL,
+                assigned_to TEXT,
                 subject TEXT,
                 body TEXT,
                 reason TEXT NOT NULL
@@ -56,9 +60,9 @@ def write_sqlite(entries: list[AuditEntry], db_path: str | Path) -> None:
             """
             INSERT INTO audit_log VALUES (
                 :timestamp, :invoice_no, :client_name, :contact_email, :amount, :currency,
-                :due_date, :days_overdue, :stage, :tone, :status, :subject, :body, :reason
+                :due_date, :days_overdue, :stage, :tone, :status, :generation_method,
+                :approval_status, :assigned_to, :subject, :body, :reason
             )
             """,
             [entry.model_dump(mode="json") for entry in entries],
         )
-

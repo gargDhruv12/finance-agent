@@ -1,0 +1,30 @@
+{
+  "INV-2026-001": {
+    "invoice_no": "INV-2026-001",
+    "status": "PENDING",
+    "reviewer": "finance.manager@example.com",
+    "reason": "Review generated email before sending to rajesh.kapoor@example.com.",
+    "updated_at": "2026-05-14T20:24:57.604457"
+  },
+  "INV-2026-002": {
+    "invoice_no": "INV-2026-002",
+    "status": "PENDING",
+    "reviewer": "finance.manager@example.com",
+    "reason": "Review generated email before sending to ananya.mehta@example.com.",
+    "updated_at": "2026-05-14T20:24:57.631759"
+  },
+  "INV-2026-003": {
+    "invoice_no": "INV-2026-003",
+    "status": "PENDING",
+    "reviewer": "finance.manager@example.com",
+    "reason": "Review generated email before sending to vikram.shah@example.com.",
+    "updated_at": "2026-05-14T20:24:57.656082"
+  },
+  "INV-2026-004": {
+    "invoice_no": "INV-2026-004",
+    "status": "PENDING",
+    "reviewer": "finance.manager@example.com",
+    "reason": "Review generated email before sending to priya.nair@example.com.",
+    "updated_at": "2026-05-14T20:24:57.676118"
+  }
+}

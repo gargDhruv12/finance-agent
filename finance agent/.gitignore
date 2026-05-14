@@ -9,4 +9,5 @@ __pycache__/
 venv/
 *.db
 outputs/audit_log.sqlite
-
+outputs/llm_cache.sqlite
+outputs/report_render/

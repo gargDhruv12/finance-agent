@@ -1,0 +1,116 @@
+[
+  {
+    "timestamp": "2026-05-14T20:46:50.257380",
+    "event": "invoice_started",
+    "payload": {
+      "invoice_no": "INV-2026-001",
+      "client_name": "Kapoor Textiles"
+    }
+  },
+  {
+    "timestamp": "2026-05-14T20:46:50.258387",
+    "event": "invoice_completed",
+    "payload": {
+      "invoice_no": "INV-2026-001",
+      "stage": 1,
+      "status": "DRY_RUN",
+      "generation_method": "TEMPLATE_FALLBACK",
+      "approval_status": "NOT_REQUIRED"
+    }
+  },
+  {
+    "timestamp": "2026-05-14T20:46:50.258387",
+    "event": "invoice_started",
+    "payload": {
+      "invoice_no": "INV-2026-002",
+      "client_name": "BluePeak Analytics"
+    }
+  },
+  {
+    "timestamp": "2026-05-14T20:46:50.258387",
+    "event": "invoice_completed",
+    "payload": {
+      "invoice_no": "INV-2026-002",
+      "stage": 2,
+      "status": "DRY_RUN",
+      "generation_method": "TEMPLATE_FALLBACK",
+      "approval_status": "NOT_REQUIRED"
+    }
+  },
+  {
+    "timestamp": "2026-05-14T20:46:50.258387",
+    "event": "invoice_started",
+    "payload": {
+      "invoice_no": "INV-2026-003",
+      "client_name": "Northstar Retail"
+    }
+  },
+  {
+    "timestamp": "2026-05-14T20:46:50.259390",
+    "event": "invoice_completed",
+    "payload": {
+      "invoice_no": "INV-2026-003",
+      "stage": 3,
+      "status": "DRY_RUN",
+      "generation_method": "TEMPLATE_FALLBACK",
+      "approval_status": "NOT_REQUIRED"
+    }
+  },
+  {
+    "timestamp": "2026-05-14T20:46:50.259390",
+    "event": "invoice_started",
+    "payload": {
+      "invoice_no": "INV-2026-004",
+      "client_name": "Orchid Logistics"
+    }
+  },
+  {
+    "timestamp": "2026-05-14T20:46:50.259390",
+    "event": "invoice_completed",
+    "payload": {
+      "invoice_no": "INV-2026-004",
+      "stage": 4,
+      "status": "DRY_RUN",
+      "generation_method": "TEMPLATE_FALLBACK",
+      "approval_status": "NOT_REQUIRED"
+    }
+  },
+  {
+    "timestamp": "2026-05-14T20:46:50.259390",
+    "event": "invoice_started",
+    "payload": {
+      "invoice_no": "INV-2026-005",
+      "client_name": "Summit Foods"
+    }
+  },
+  {
+    "timestamp": "2026-05-14T20:46:50.260387",
+    "event": "invoice_completed",
+    "payload": {
+      "invoice_no": "INV-2026-005",
+      "stage": 5,
+      "status": "ESCALATED",
+      "generation_method": "NO_EMAIL_ESCALATED",
+      "approval_status": "MANUAL_REVIEW"
+    }
+  },
+  {
+    "timestamp": "2026-05-14T20:46:50.260387",
+    "event": "invoice_started",
+    "payload": {
+      "invoice_no": "INV-2026-006",
+      "client_name": "FreshCart Labs"
+    }
+  },
+  {
+    "timestamp": "2026-05-14T20:46:50.260387",
+    "event": "invoice_completed",
+    "payload": {
+      "invoice_no": "INV-2026-006",
+      "stage": 0,
+      "status": "SKIPPED",
+      "generation_method": "NO_EMAIL",
+      "approval_status": "NOT_REQUIRED"
+    }
+  }
+]

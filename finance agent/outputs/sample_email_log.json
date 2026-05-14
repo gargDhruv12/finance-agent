@@ -1,6 +1,6 @@
 [
   {
-    "timestamp": "2026-05-14T20:08:52.367202",
+    "timestamp": "2026-05-14T20:46:50.258387",
     "invoice_no": "INV-2026-001",
     "client_name": "Kapoor Textiles",
     "contact_email": "rajesh.kapoor@example.com",
@@ -12,12 +12,14 @@
     "tone": "Warm & Friendly",
     "status": "DRY_RUN",
     "generation_method": "TEMPLATE_FALLBACK",
+    "approval_status": "NOT_REQUIRED",
+    "assigned_to": null,
     "subject": "Quick Reminder - Invoice #INV-2026-001 | INR 45000 Due",
     "body": "Hi Rajesh Kapoor,\n\nI hope you are doing well. This is a friendly reminder for Kapoor Textiles that Invoice #INV-2026-001 for INR 45000 was due on 2026-05-10 and is now 4 days overdue.\n\nIf this has already been processed, please disregard this note. Otherwise, you can complete the payment here: https://payments.example.com/pay/INV-2026-001.\n\nThank you,\nFinance Team",
     "reason": "Email generated and logged in dry-run mode."
   },
   {
-    "timestamp": "2026-05-14T20:08:52.373085",
+    "timestamp": "2026-05-14T20:46:50.258387",
     "invoice_no": "INV-2026-002",
     "client_name": "BluePeak Analytics",
     "contact_email": "ananya.mehta@example.com",
@@ -29,12 +31,14 @@
     "tone": "Polite but Firm",
     "status": "DRY_RUN",
     "generation_method": "TEMPLATE_FALLBACK",
+    "approval_status": "NOT_REQUIRED",
+    "assigned_to": null,
     "subject": "Payment Confirmation Requested - Invoice #INV-2026-002",
     "body": "Hi Ananya Mehta,\n\nOur records show that BluePeak Analytics's Invoice #INV-2026-002 for INR 87500, due on 2026-05-03, remains unpaid and is now 11 days overdue.\n\nPlease confirm the expected payment date, or use this payment link to settle the invoice: https://payments.example.com/pay/INV-2026-002.\n\nRegards,\nFinance Team",
     "reason": "Email generated and logged in dry-run mode."
   },
   {
-    "timestamp": "2026-05-14T20:08:52.377085",
+    "timestamp": "2026-05-14T20:46:50.259390",
     "invoice_no": "INV-2026-003",
     "client_name": "Northstar Retail",
     "contact_email": "vikram.shah@example.com",
@@ -46,12 +50,14 @@
     "tone": "Formal & Serious",
     "status": "DRY_RUN",
     "generation_method": "TEMPLATE_FALLBACK",
+    "approval_status": "NOT_REQUIRED",
+    "assigned_to": null,
     "subject": "IMPORTANT: Outstanding Payment - Invoice #INV-2026-003 (18 Days Overdue)",
     "body": "Dear Vikram Shah,\n\nDespite earlier follow-ups, Northstar Retail's Invoice #INV-2026-003 for INR 120000, due on 2026-04-26, remains unpaid and is now 18 days overdue.\n\nWe request your immediate attention. Continued non-payment may impact credit terms. Please respond within 48 hours or complete payment here: https://payments.example.com/pay/INV-2026-003.\n\nRegards,\nFinance Team",
     "reason": "Email generated and logged in dry-run mode."
   },
   {
-    "timestamp": "2026-05-14T20:08:52.381088",
+    "timestamp": "2026-05-14T20:46:50.259390",
     "invoice_no": "INV-2026-004",
     "client_name": "Orchid Logistics",
     "contact_email": "priya.nair@example.com",
@@ -63,12 +69,14 @@
     "tone": "Stern & Urgent",
     "status": "DRY_RUN",
     "generation_method": "TEMPLATE_FALLBACK",
+    "approval_status": "NOT_REQUIRED",
+    "assigned_to": null,
     "subject": "FINAL NOTICE - Invoice #INV-2026-004 - Immediate Action Required",
     "body": "Dear Priya Nair,\n\nThis is the final reminder for Orchid Logistics's Invoice #INV-2026-004 for INR 64000. The invoice was due on 2026-04-19 and is now 25 days overdue.\n\nPlease pay immediately using https://payments.example.com/pay/INV-2026-004 or contact us today. Failure to remit payment may result in escalation to the finance/legal review process.\n\nRegards,\nFinance Team",
     "reason": "Email generated and logged in dry-run mode."
   },
   {
-    "timestamp": "2026-05-14T20:08:52.386089",
+    "timestamp": "2026-05-14T20:46:50.260387",
     "invoice_no": "INV-2026-005",
     "client_name": "Summit Foods",
     "contact_email": "amit.verma@example.com",
@@ -80,12 +88,14 @@
     "tone": "Escalation Flag",
     "status": "ESCALATED",
     "generation_method": "NO_EMAIL_ESCALATED",
+    "approval_status": "MANUAL_REVIEW",
+    "assigned_to": "finance.manager@example.com",
     "subject": null,
     "body": null,
     "reason": "Invoice is over 30 days overdue; flagged for finance/legal review."
   },
   {
-    "timestamp": "2026-05-14T20:08:52.389943",
+    "timestamp": "2026-05-14T20:46:50.260387",
     "invoice_no": "INV-2026-006",
     "client_name": "FreshCart Labs",
     "contact_email": "neha.iyer@example.com",
@@ -97,6 +107,8 @@
     "tone": "Not overdue",
     "status": "SKIPPED",
     "generation_method": "NO_EMAIL",
+    "approval_status": "NOT_REQUIRED",
+    "assigned_to": null,
     "subject": null,
     "body": null,
     "reason": "Invoice is not overdue."

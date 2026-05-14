@@ -15,9 +15,12 @@ flowchart TD
   E -- "Yes" --> F["Create Manual Review Audit Entry"]
   E -- "No" --> G["Generate EmailDraft"]
   G --> H["Validate Personalization"]
-  H --> I["Dry-Run Sender"]
-  I --> J["Write Audit Outputs"]
-  F --> J
+  H --> I{"Real Send Requires Approval?"}
+  I -- "Pending / Rejected" --> J["Approval Queue"]
+  I -- "Approved or Dry Run" --> K["Dry-Run or SMTP Sender"]
+  J --> L["Audit + Trace Outputs"]
+  K --> L
+  F --> L
 ```
 
 ## Agent Responsibilities
@@ -26,10 +29,10 @@ flowchart TD
 - Escalation logic enforces the mandatory matrix.
 - Email generation handles tone and wording.
 - Validation prevents generic or incomplete emails.
-- Sender ensures dry-run behavior by default.
-- Audit logging records every action.
+- Approval queue gates real sends.
+- Sender ensures dry-run behavior by default and supports optional SMTP.
+- Audit logging and tracing record every action.
 
 ## Why This Architecture
 
 Finance automation needs predictable behavior. A fully autonomous agent could be risky because it might over-escalate, send incorrect information, or email real clients during testing. This design uses the LLM only where it adds value: writing human-friendly emails.
-

@@ -77,6 +77,26 @@ Mitigations:
 
 - Dry-run mode is the default behavior.
 - The sender returns `DRY_RUN` status instead of connecting to SMTP.
-- Real sending requires code changes and verified credentials.
+- Real sending requires `DRY_RUN=false`, SMTP credentials, and approval if `REQUIRE_APPROVAL=true`.
 - Sample data uses example addresses.
 
+## Human Approval
+
+Risk: A generated email may be technically valid but inappropriate for a sensitive client relationship.
+
+Mitigations:
+
+- Real sending is gated by an approval queue.
+- Review status is persisted in `outputs/approvals.json`.
+- Rejected emails are logged as `REJECTED`, not sent.
+- 30+ day overdue invoices bypass email sending and are assigned to finance/legal review.
+
+## Observability Data
+
+Risk: Hosted tracing can accidentally receive sensitive invoice data.
+
+Mitigations:
+
+- Local tracing is the default.
+- LangSmith is opt-in only.
+- Production use should redact or minimize PII before enabling hosted tracing.

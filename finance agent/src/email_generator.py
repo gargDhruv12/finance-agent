@@ -3,14 +3,21 @@ from __future__ import annotations
 import json
 from textwrap import dedent
 
+from .cache import LLMCache
 from .models import EmailDraft, EscalationDecision, InvoiceRecord
 from .validators import validate_email_personalization
 
 
 class EmailGenerator:
-    def __init__(self, gemini_api_key: str | None = None, gemini_model: str = "gemini-2.0-flash") -> None:
+    def __init__(
+        self,
+        gemini_api_key: str | None = None,
+        gemini_model: str = "gemini-2.0-flash",
+        cache: LLMCache | None = None,
+    ) -> None:
         self.gemini_api_key = gemini_api_key
         self.gemini_model = gemini_model
+        self.cache = cache
         self.last_generation_method = "NONE"
         self._gemini_disabled_reason: str | None = None
 
@@ -46,6 +53,10 @@ class EmailGenerator:
         genai.configure(api_key=self.gemini_api_key)
         model = genai.GenerativeModel(self.gemini_model)
         prompt = self._build_prompt(invoice, decision)
+        cached_response = self.cache.get(prompt) if self.cache else None
+        if cached_response:
+            self.last_generation_method = "GEMINI_CACHE"
+            return EmailDraft.model_validate(json.loads(cached_response))
         try:
             response = model.generate_content(prompt)
         except Exception as exc:
@@ -58,6 +69,8 @@ class EmailGenerator:
             raw_text = raw_text.removeprefix("json").strip()
         payload = json.loads(raw_text)
         draft = EmailDraft.model_validate(payload)
+        if self.cache:
+            self.cache.set(prompt, draft.model_dump_json())
         self.last_generation_method = "GEMINI"
         return draft
 

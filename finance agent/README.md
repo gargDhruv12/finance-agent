@@ -12,6 +12,11 @@ This repository implements **Task 2: Finance Credit Follow-Up Email Agent** from
 - Generates personalized emails using Gemini when configured, with a deterministic template fallback for demos.
 - Uses Pydantic models to validate invoice data, escalation decisions, generated emails, and audit entries.
 - Runs in `DRY_RUN=true` mode by default so no real emails are sent during testing.
+- Includes an approval queue before real email sending.
+- Supports optional SMTP sending when dry-run is disabled and approvals are present.
+- Adds SQLite LLM response caching to reduce repeated Gemini calls.
+- Writes local trace events and can optionally forward events to LangSmith.
+- Supports APScheduler interval runs for recurring invoice scans.
 - Logs every action to JSON, CSV, and SQLite.
 - Stops automated emails after Stage 4 and flags 30+ day overdue invoices for manual review.
 - Includes tests, sample input data, sample outputs, documentation, and an optional Streamlit dashboard.
@@ -60,6 +65,7 @@ For free-tier LLM generation, add a Gemini API key to `.env`:
 GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-2.0-flash
 DRY_RUN=true
+REQUIRE_APPROVAL=true
 ```
 
 If no Gemini key is configured, the app still runs end-to-end using deterministic email templates.
@@ -76,6 +82,17 @@ Outputs are written to:
 - `outputs/sample_email_log.json`
 - `outputs/sample_email_log.csv`
 - `outputs/audit_log.sqlite`
+- `outputs/trace_events.json`
+- `outputs/llm_cache.sqlite`
+- `outputs/approvals.json`
+
+## Run On A Schedule
+
+```bash
+python -m src.main --today 2026-05-14 --schedule
+```
+
+The scheduler interval is controlled by `SCHEDULER_INTERVAL_HOURS` in `.env`.
 
 ## Run The Dashboard
 
@@ -84,6 +101,20 @@ streamlit run app.py
 ```
 
 The dashboard shows processed invoices, dry-run email counts, escalation counts, and generated email bodies.
+It also includes filters, an approval queue, approve/reject buttons, and local trace events.
+
+## Approval And Real Sending
+
+`DRY_RUN=true` is the default and recommended demo setting. In this mode the agent generates and logs email drafts but does not send real emails.
+
+For production-style testing:
+
+1. Set `DRY_RUN=false`.
+2. Keep `REQUIRE_APPROVAL=true`.
+3. Configure SMTP credentials in `.env`.
+4. Approve drafts through the dashboard or `outputs/approvals.json`.
+
+Invoices over 30 days overdue are never emailed automatically. They are always marked for manual finance/legal review.
 
 ## Input Data Format
 
@@ -119,6 +150,16 @@ See `docs/technical_stack_decision_log.md`.
 ## Prompt Design
 
 See `docs/prompt_design_summary.md`.
+
+## Observability
+
+Local tracing is enabled through `ENABLE_LOCAL_TRACING=true`, which writes `outputs/trace_events.json`.
+
+Optional hosted tracing:
+
+- LangSmith: set `LANGSMITH_TRACING=true`, `LANGSMITH_API_KEY`, and `LANGSMITH_PROJECT`.
+
+The app continues to run if hosted tracing packages or credentials are missing.
 
 ## Security Mitigations
 
