@@ -1,0 +1,8 @@
+invoice_no,client_name,contact_name,contact_email,amount,currency,due_date,follow_up_count,payment_link,account_manager_email
+INV-2026-001,Kapoor Textiles,Rajesh Kapoor,rajesh.kapoor@example.com,45000,INR,2026-05-10,0,https://payments.example.com/pay/INV-2026-001,finance.manager@example.com
+INV-2026-002,BluePeak Analytics,Ananya Mehta,ananya.mehta@example.com,87500,INR,2026-05-03,1,https://payments.example.com/pay/INV-2026-002,finance.manager@example.com
+INV-2026-003,Northstar Retail,Vikram Shah,vikram.shah@example.com,120000,INR,2026-04-26,2,https://payments.example.com/pay/INV-2026-003,finance.manager@example.com
+INV-2026-004,Orchid Logistics,Priya Nair,priya.nair@example.com,64000,INR,2026-04-19,3,https://payments.example.com/pay/INV-2026-004,finance.manager@example.com
+INV-2026-005,Summit Foods,Amit Verma,amit.verma@example.com,98000,INR,2026-04-10,4,https://payments.example.com/pay/INV-2026-005,finance.manager@example.com
+INV-2026-006,FreshCart Labs,Neha Iyer,neha.iyer@example.com,30000,INR,2026-05-20,0,https://payments.example.com/pay/INV-2026-006,finance.manager@example.com
+

@@ -1,0 +1,12 @@
+.env
+prompts/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+*.db
+outputs/audit_log.sqlite
+
