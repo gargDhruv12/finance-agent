@@ -188,63 +188,63 @@ def build() -> None:
 
     subtitle = document.add_paragraph(style="Subtitle")
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    subtitle.add_run("Project Report for AI Enablement Internship - Task 2")
+    subtitle.add_run("AI Enablement Internship Project Report")
 
     meta = document.add_paragraph()
     meta.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    meta.add_run("Submission Date: 14 May 2026 | Mode: GitHub / Source Code + Report")
+    meta.add_run("Dhruv | IT Branch, NIT Kurukshetra | Roll No. 123103032")
 
     add_callout(
         document,
         "Executive Summary",
-        "This project implements an AI-assisted finance agent that reads overdue invoice records, "
-        "determines the correct follow-up stage, generates personalized payment reminder emails, "
-        "runs in dry-run mode by default, and records every action in an audit trail. The prototype "
-        "prioritizes safety, traceability, and cost-conscious tooling suitable for an internship submission.",
+        "I built this prototype to reduce the manual effort involved in following up on overdue invoices. "
+        "The agent reads invoice data, identifies which accounts need attention, drafts context-aware follow-up "
+        "emails, and keeps a clear audit trail of every decision. I kept the system safe by making dry-run mode "
+        "the default, adding an approval layer before real sends, and separating deterministic finance logic from "
+        "LLM-based wording.",
     )
 
-    document.add_heading("1. Project Overview", level=1)
+    document.add_heading("1. Project Context", level=1)
     document.add_paragraph(
-        "Finance teams often spend significant time manually following up on overdue invoices. "
-        "Manual follow-ups can be inconsistent in tone, delayed, and difficult to audit. The proposed "
-        "agent automates the drafting and logging of payment follow-up emails while preserving control "
-        "through deterministic escalation logic and dry-run execution."
+        "Payment follow-up is a small workflow on paper, but in practice it creates repeated work for finance "
+        "teams. Every overdue invoice needs the right tone: too soft, and payment may be delayed; too aggressive, "
+        "and the client relationship can suffer. I approached this as an automation problem where the system should "
+        "handle routine drafting and logging, while humans remain in control of sensitive decisions."
     )
     document.add_paragraph(
-        "The solution follows Task 2 from the AI Enablement Internship brief: Finance Credit Follow-Up Email Agent. "
-        "It supports pending invoice ingestion, tone escalation, personalized email generation, mock sending, "
-        "audit logging, and manual review flags for severely overdue accounts."
+        "The final prototype is a finance follow-up agent that works on structured invoice records. It can run from "
+        "the command line or through a Streamlit dashboard, generate email drafts for different overdue stages, and "
+        "flag accounts that should be reviewed manually instead of being emailed again."
     )
 
-    document.add_heading("2. Objectives", level=1)
+    document.add_heading("2. What I Set Out To Build", level=1)
     for item in [
-        "Read invoice records from CSV or Excel with fields such as invoice number, client, amount, due date, contact email, and follow-up count.",
-        "Identify overdue invoices and map them to the mandatory escalation matrix.",
-        "Generate professional, personalized emails that include all required invoice details.",
-        "Use dry-run mode to prevent accidental emails during testing and demos.",
-        "Maintain a complete audit trail for generated emails, skipped records, and manual escalation flags.",
-        "Document LLM choice, framework choice, prompt design, and security mitigations as required by the internship brief.",
+        "A working end-to-end flow that starts from invoice data and ends with reviewable email outputs.",
+        "A clear escalation policy so email tone changes based on how late the payment is.",
+        "Personalized drafts that always include invoice number, client name, amount, due date, days overdue, and payment link.",
+        "A safe testing setup where emails are logged instead of sent by default.",
+        "An approval path for real sending, so automation does not bypass finance review.",
+        "A clean repository with documentation, sample data, sample outputs, and a recruiter-friendly demo path.",
     ]:
         add_bullet(document, item)
 
-    document.add_heading("3. Methodology", level=1)
+    document.add_heading("3. Design Approach", level=1)
     document.add_paragraph(
-        "The agent was designed as a controlled workflow rather than a fully autonomous system. "
-        "The LLM is used only for language generation, while business-critical decisions such as overdue status, "
-        "escalation stage, and send behavior are handled by deterministic Python logic. This reduces hallucination risk "
-        "and makes the workflow easier to explain during review."
+        "I deliberately avoided making the LLM responsible for financial decisions. The system calculates days overdue "
+        "and chooses the escalation stage through deterministic code. The LLM is used only where it is useful: turning "
+        "validated invoice facts into a polished email. This makes the prototype easier to audit and safer to extend."
     )
     add_table(
         document,
         ["Step", "Component", "Purpose"],
         [
-            ["1", "Data ingestion", "Load CSV or Excel invoice records and validate required fields."],
-            ["2", "Trigger logic", "Calculate days overdue and skip invoices that are not overdue."],
-            ["3", "Escalation engine", "Apply the required stage matrix from warm reminder to manual review."],
-            ["4", "Email generation", "Use Gemini when available, otherwise deterministic templates."],
-            ["5", "Personalization validation", "Confirm required fields appear in the generated email."],
-            ["6", "Dry-run sender", "Log send intent without contacting real clients."],
-            ["7", "Audit trail", "Write JSON, CSV, and SQLite records for review and compliance."],
+            ["1", "Data ingestion", "Read invoice rows from CSV or Excel and validate the schema."],
+            ["2", "Overdue calculation", "Compute days overdue from the due date using a reproducible demo date when needed."],
+            ["3", "Escalation logic", "Select the communication stage using deterministic finance rules."],
+            ["4", "Draft generation", "Use Gemini when quota is available, with a reliable template fallback."],
+            ["5", "Validation", "Check that required invoice facts are present in the generated draft."],
+            ["6", "Approval / dry-run", "Queue real sends for approval and keep demo runs in dry-run mode."],
+            ["7", "Auditability", "Write JSON, CSV, SQLite, and local trace records for review."],
         ],
         [0.55, 1.7, 4.1],
     )
@@ -255,56 +255,57 @@ def build() -> None:
         ["Layer", "Technology", "Reason"],
         [
             ["Language", "Python", "Simple, readable, and suitable for data processing workflows."],
-            ["LLM", "Gemini API", "Free-tier-friendly option; configurable model in .env."],
-            ["Framework", "LangGraph-capable workflow", "Provides clear node-based agent flow with fallback support."],
+            ["LLM", "Gemini API", "Chosen as a free-tier-friendly option; model is configurable from .env."],
+            ["Framework", "LangGraph-capable workflow", "Useful for representing the agent as clear workflow nodes."],
             ["Validation", "Pydantic", "Structured models for invoice records, decisions, drafts, and audits."],
             ["Data", "pandas CSV/Excel", "Common finance-friendly input format."],
-            ["Sending", "Dry-run sender", "Prevents accidental real client emails during testing."],
-            ["Logging", "JSON, CSV, SQLite", "Human-readable output plus persistent audit records."],
-            ["UI", "Streamlit", "Optional dashboard for demo visibility."],
+            ["Sending", "Dry-run + SMTP option", "Safe by default, but extensible for approved real sending."],
+            ["Observability", "Local tracing + LangSmith", "Local trace file by default; LangSmith can be enabled with credentials."],
+            ["UI", "Streamlit", "Dashboard for running, filtering, reviewing, and approving drafts."],
         ],
         [1.15, 1.75, 3.45],
     )
 
-    document.add_heading("5. Escalation Matrix", level=1)
+    document.add_heading("5. Follow-Up Policy", level=1)
     add_table(
         document,
         ["Stage", "Trigger", "Tone", "Action"],
         [
-            ["1", "1-7 days overdue", "Warm & Friendly", "Generate gentle reminder with payment link."],
-            ["2", "8-14 days overdue", "Polite but Firm", "Request payment confirmation date."],
-            ["3", "15-21 days overdue", "Formal & Serious", "Ask for response within 48 hours."],
-            ["4", "22-30 days overdue", "Stern & Urgent", "Final reminder before escalation."],
-            ["5", "30+ days overdue", "Escalation Flag", "No auto email; assign for manual finance/legal review."],
+            ["1", "1-7 days late", "Warm & Friendly", "A light reminder that assumes the delay may be accidental."],
+            ["2", "8-14 days late", "Polite but Firm", "A clearer request for payment status or payment date."],
+            ["3", "15-21 days late", "Formal & Serious", "A more direct message asking for response within 48 hours."],
+            ["4", "22-30 days late", "Stern & Urgent", "A final notice before the matter is escalated internally."],
+            ["5", "More than 30 days late", "Manual Review", "No automated email; finance/legal review is required."],
         ],
         [0.7, 1.5, 1.45, 2.9],
     )
 
-    document.add_heading("6. Implementation Summary", level=1)
+    document.add_heading("6. Implementation Details", level=1)
     for item in [
-        "The GitHub repository is intended to be named finance-agent, with project files placed at the repository root for a clean submission view.",
-        "The CLI entry point is python -m src.main --today 2026-05-14.",
-        "The sample dataset includes Stage 1, Stage 2, Stage 3, Stage 4, escalation flag, and not-overdue records.",
-        "The app uses DRY_RUN=true by default, so generated emails are logged but not sent.",
-        "The prompts folder is intentionally ignored by Git. A safe prompt design summary is included in the docs.",
-        "Gemini generation is configurable through GEMINI_MODEL. If quota is unavailable, the system falls back to templates and continues running.",
+        "Repository files are placed at the root so GitHub opens directly to README, source code, docs, data, and tests.",
+        "The CLI entry point is python -m src.main --today 2026-05-14, which gives a repeatable demo run.",
+        "The sample dataset covers all important paths: four follow-up stages, one manual escalation, and one not-overdue invoice.",
+        "DRY_RUN=true is the default, so generated messages are visible in logs without sending real emails.",
+        "Prompt files are kept out of Git, while the prompt design approach is documented safely.",
+        "Gemini calls are cached in SQLite and fall back to deterministic templates if API quota is unavailable.",
+        "The Streamlit dashboard supports filters, draft review, approval/rejection, and local trace inspection.",
     ]:
         add_bullet(document, item)
 
-    document.add_heading("7. Findings And Results", level=1)
+    document.add_heading("7. Demo Results", level=1)
     document.add_paragraph(
-        "The sample run processed six invoice records using the demo date 14 May 2026. "
-        "The output demonstrated all required behavioral cases: four dry-run emails, one manual escalation, "
-        "and one skipped not-overdue invoice."
+        "The sample run processed six invoice records and demonstrated the main behavior of the agent. "
+        "Four invoices produced dry-run email drafts, one invoice crossed the manual review threshold, and one "
+        "invoice was skipped because it was not overdue."
     )
     add_table(
         document,
         ["Invoice", "Days Overdue", "Stage", "Status", "Generation"],
         [
-            ["INV-2026-001", "4", "1", "DRY_RUN", "Template fallback or Gemini when quota is available"],
-            ["INV-2026-002", "11", "2", "DRY_RUN", "Template fallback or Gemini when quota is available"],
-            ["INV-2026-003", "18", "3", "DRY_RUN", "Template fallback or Gemini when quota is available"],
-            ["INV-2026-004", "25", "4", "DRY_RUN", "Template fallback or Gemini when quota is available"],
+            ["INV-2026-001", "4", "1", "DRY_RUN", "Draft generated and logged"],
+            ["INV-2026-002", "11", "2", "DRY_RUN", "Draft generated and logged"],
+            ["INV-2026-003", "18", "3", "DRY_RUN", "Draft generated and logged"],
+            ["INV-2026-004", "25", "4", "DRY_RUN", "Draft generated and logged"],
             ["INV-2026-005", "34", "5", "ESCALATED", "No email; manual review required"],
             ["INV-2026-006", "0", "0", "SKIPPED", "No email; invoice is not overdue"],
         ],
@@ -316,29 +317,18 @@ def build() -> None:
         document,
         ["Risk", "Mitigation"],
         [
-            ["Prompt injection", "Validated invoice fields, constrained prompts, and structured output parsing."],
+            ["Prompt injection", "Validated invoice fields, constrained prompts, and post-generation checks."],
             ["Data privacy / PII", "Local processing, fake sample data, minimized fields in prompts, and local logs."],
             ["API key exposure", ".env is ignored by Git; .env.example contains placeholders only."],
             ["Hallucination", "Invoice facts come from validated data; generated email content is checked for mandatory fields."],
             ["Unauthorized access", "Prototype runs locally; production deployment should add authentication and rate limits."],
             ["Email spoofing", "Real sending disabled; production requires verified sender domain, SPF, DKIM, and DMARC."],
-            ["Accidental sending", "DRY_RUN=true by default and sender does not connect to SMTP in this prototype."],
+            ["Accidental sending", "DRY_RUN=true by default; real sends require SMTP settings and approval."],
         ],
         [1.65, 4.8],
     )
 
-    document.add_heading("9. Deliverables", level=1)
-    for item in [
-        "Source code and documentation placed at the repository root for a clean GitHub submission.",
-        "README with setup, run instructions, architecture, tech decisions, and security notes.",
-        "Sample input dataset in data/sample_invoices.csv.",
-        "Sample output logs in outputs/sample_email_log.json and outputs/sample_email_log.csv.",
-        "Dedicated documents for technical stack, prompt design, security mitigations, architecture, and demo deck outline.",
-        "Optional Streamlit dashboard through streamlit run app.py.",
-    ]:
-        add_bullet(document, item)
-
-    document.add_heading("10. Implemented Enhancements", level=1)
+    document.add_heading("9. Implemented Enhancements", level=1)
     for item in [
         "Human approval queue before real email sending.",
         "Optional SMTP sender guarded by dry-run and approval settings.",
@@ -349,22 +339,14 @@ def build() -> None:
     ]:
         add_bullet(document, item)
 
-    document.add_heading("11. Next Production Steps", level=1)
+    document.add_heading("10. Next Steps", level=1)
     for item in [
-        "Configure a verified sender domain with SPF, DKIM, and DMARC before real client sends.",
-        "Add authentication and role-based access if the dashboard is deployed beyond local use.",
-        "Connect the input source to the finance team's actual ERP, accounting system, or Google Sheet.",
-        "Add PII redaction before enabling hosted tracing in production.",
+        "Connect the agent to a real finance data source.",
+        "Add user login if the dashboard is shared with a team.",
+        "Use a verified email domain before enabling real client emails.",
+        "Mask sensitive client data before sending traces to any external tool.",
     ]:
         add_bullet(document, item)
-
-    document.add_heading("12. Conclusion", level=1)
-    document.add_paragraph(
-        "The Finance Credit Follow-Up Email Agent provides a practical, auditable prototype for automating overdue "
-        "invoice follow-ups. It satisfies the internship task requirements while keeping real-world safety concerns "
-        "front and center: dry-run mode is enabled by default, all decisions are traceable, and records beyond the "
-        "Stage 4 threshold are flagged for human review instead of being emailed automatically."
-    )
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
     document.save(OUT)

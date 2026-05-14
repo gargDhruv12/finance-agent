@@ -1,35 +1,37 @@
 # Finance Credit Follow-Up Email Agent
 
-An AI agent prototype for finance teams to generate payment follow-up emails for overdue invoices. The agent reads invoice records, assigns the correct escalation stage, generates personalized emails, logs every action, and flags invoices that should move to manual finance/legal review.
+An AI-assisted finance workflow that reads overdue invoice records, decides the right follow-up stage, generates personalized payment reminder emails, and logs every action for review.
 
-This repository implements **Task 2: Finance Credit Follow-Up Email Agent** from the AI Enablement Internship brief.
+The project is built to be safe for demos: emails are not sent by default. The agent runs in dry-run mode, writes sample email logs, and flags highly overdue invoices for manual finance/legal review.
 
-## Core Features
+## Built By
 
-- Reads pending credit records from CSV or Excel.
-- Calculates days overdue from invoice due dates.
-- Applies the mandatory tone escalation matrix.
-- Generates personalized emails using Gemini when configured, with a deterministic template fallback for demos.
-- Uses Pydantic models to validate invoice data, escalation decisions, generated emails, and audit entries.
-- Runs in `DRY_RUN=true` mode by default so no real emails are sent during testing.
-- Includes an approval queue before real email sending.
-- Supports optional SMTP sending when dry-run is disabled and approvals are present.
-- Adds SQLite LLM response caching to reduce repeated Gemini calls.
-- Writes local trace events and can optionally forward events to LangSmith.
-- Supports APScheduler interval runs for recurring invoice scans.
-- Logs every action to JSON, CSV, and SQLite.
-- Stops automated emails after Stage 4 and flags 30+ day overdue invoices for manual review.
-- Includes tests, sample input data, sample outputs, documentation, and an optional Streamlit dashboard.
+Dhruv  
+IT Branch, NIT Kurukshetra  
+Roll No. 123103032
 
-## Escalation Matrix
+## Features
 
-| Stage | Trigger | Tone | Key Message | CTA |
-|---|---|---|---|---|
-| 1st Follow-Up | 1-7 days overdue | Warm & Friendly | Gentle reminder, assume oversight | Pay now link / bank details |
-| 2nd Follow-Up | 8-14 days overdue | Polite but Firm | Payment still pending; request confirmation | Confirm payment date |
-| 3rd Follow-Up | 15-21 days overdue | Formal & Serious | Escalating concern; mention impact | Respond within 48 hrs |
-| 4th Follow-Up | 22-30 days overdue | Stern & Urgent | Final reminder before escalation | Pay immediately or call us |
-| Escalation Flag | 30+ days overdue | Escalation Flag | Human review required; no auto email | Assign to finance manager |
+- Reads invoice records from CSV or Excel.
+- Calculates days overdue from the invoice due date.
+- Applies a stage-wise follow-up policy.
+- Generates personalized emails using Gemini when available.
+- Falls back to deterministic templates if Gemini quota or API access is unavailable.
+- Validates generated emails so required invoice details are not missed.
+- Runs in `DRY_RUN=true` mode by default.
+- Logs results to JSON, CSV, SQLite, and local trace files.
+- Supports an approval queue before real email sending.
+- Includes optional SMTP sending, APScheduler scheduling, Streamlit dashboard, SQLite LLM cache, and optional LangSmith tracing.
+
+## Follow-Up Policy
+
+| Stage | Trigger | Tone | Action |
+|---|---|---|---|
+| 1 | 1-7 days overdue | Warm & Friendly | Gentle reminder with payment link |
+| 2 | 8-14 days overdue | Polite but Firm | Ask for payment confirmation |
+| 3 | 15-21 days overdue | Formal & Serious | Ask for response within 48 hours |
+| 4 | 22-30 days overdue | Stern & Urgent | Final reminder before escalation |
+| 5 | 30+ days overdue | Manual Review | No auto email; assign to finance/legal review |
 
 ## Project Structure
 
@@ -38,15 +40,14 @@ app.py
 README.md
 requirements.txt
 .env.example
-.gitignore
 data/sample_invoices.csv
-docs/
-outputs/
+outputs/sample_email_log.json
+outputs/sample_email_log.csv
 src/
 tests/
 ```
 
-The local `prompts/` folder is intentionally ignored by Git. The prompt strategy and iterations are documented in `docs/prompt_design_summary.md` without committing full private prompt files.
+`docs/` and `prompts/` are kept local and ignored by Git. The Word project report is still available locally for form upload, but the GitHub README is complete on its own.
 
 ## Setup
 
@@ -57,64 +58,63 @@ pip install -r requirements.txt
 copy .env.example .env
 ```
 
-For free-tier LLM generation, add a Gemini API key to `.env`:
+Open `.env` and set at least:
 
 ```env
-GEMINI_API_KEY=your_gemini_api_key_here
+GEMINI_API_KEY=your_gemini_key_here
 GEMINI_MODEL=gemini-2.0-flash
 DRY_RUN=true
 REQUIRE_APPROVAL=true
+ENABLE_LOCAL_TRACING=true
+LANGSMITH_TRACING=false
 ```
 
-If no Gemini key is configured, the app still runs end-to-end using deterministic email templates.
-If your Gemini account does not support the default model, update `GEMINI_MODEL` in `.env` to a model listed for your key in Google AI Studio.
+If Gemini quota is unavailable, the project still runs using template fallback emails.
 
-## Run The Agent
+## Run
 
 ```bash
 python -m src.main --today 2026-05-14
 ```
 
-Outputs are written to:
+Expected sample behavior:
 
-- `outputs/sample_email_log.json`
-- `outputs/sample_email_log.csv`
-- `outputs/audit_log.sqlite`
-- `outputs/trace_events.json`
-- `outputs/llm_cache.sqlite`
-- `outputs/approvals.json`
-
-## Run On A Schedule
-
-```bash
-python -m src.main --today 2026-05-14 --schedule
+```text
+INV-2026-001: stage=1, status=DRY_RUN
+INV-2026-002: stage=2, status=DRY_RUN
+INV-2026-003: stage=3, status=DRY_RUN
+INV-2026-004: stage=4, status=DRY_RUN
+INV-2026-005: stage=5, status=ESCALATED
+INV-2026-006: stage=0, status=SKIPPED
 ```
 
-The scheduler interval is controlled by `SCHEDULER_INTERVAL_HOURS` in `.env`.
-
-## Run The Dashboard
+## Dashboard
 
 ```bash
 streamlit run app.py
 ```
 
-The dashboard shows processed invoices, dry-run email counts, escalation counts, and generated email bodies.
-It also includes filters, an approval queue, approve/reject buttons, and local trace events.
+The dashboard lets you:
 
-## Approval And Real Sending
+- run the agent
+- filter invoices by stage/status
+- review generated email bodies
+- approve or reject drafts
+- inspect local trace events
 
-`DRY_RUN=true` is the default and recommended demo setting. In this mode the agent generates and logs email drafts but does not send real emails.
+## Scheduling
 
-For production-style testing:
+```bash
+python -m src.main --today 2026-05-14 --schedule
+```
 
-1. Set `DRY_RUN=false`.
-2. Keep `REQUIRE_APPROVAL=true`.
-3. Configure SMTP credentials in `.env`.
-4. Approve drafts through the dashboard or `outputs/approvals.json`.
+The interval is controlled by:
 
-Invoices over 30 days overdue are never emailed automatically. They are always marked for manual finance/legal review.
+```env
+SCHEDULER_INTERVAL_HOURS=24
+```
 
-## Input Data Format
+## Data Format
 
 Required columns:
 
@@ -123,45 +123,83 @@ invoice_no, client_name, contact_name, contact_email, amount, currency,
 due_date, follow_up_count, payment_link, account_manager_email
 ```
 
-Each generated email must include the client name, invoice number, amount due, due date, number of days overdue, and payment link/contact detail.
+Every generated email must include:
 
-## Agent Architecture
+- client name
+- invoice number
+- amount due
+- due date
+- days overdue
+- payment link or contact detail
+
+## Architecture
 
 ```mermaid
 flowchart LR
-  A["CSV / Excel Invoice Data"] --> B["Ingestion + Pydantic Validation"]
-  B --> C["Overdue Trigger Logic"]
-  C --> D["Tone Escalation Engine"]
-  D --> E{"30+ Days Overdue?"}
-  E -- "Yes" --> F["Manual Finance/Legal Review Flag"]
-  E -- "No" --> G["LLM or Template Email Generation"]
-  G --> H["Personalization Validator"]
-  H --> I["Dry-Run Sender"]
-  I --> J["Audit Log: JSON / CSV / SQLite"]
-  F --> J
+  A["CSV / Excel Data"] --> B["Validate Records"]
+  B --> C["Calculate Days Overdue"]
+  C --> D["Choose Follow-Up Stage"]
+  D --> E{"30+ Days?"}
+  E -- "Yes" --> F["Manual Review Flag"]
+  E -- "No" --> G["Gemini or Template Draft"]
+  G --> H["Validate Personalization"]
+  H --> I{"Dry Run?"}
+  I -- "Yes" --> J["Log Draft"]
+  I -- "No" --> K["Approval Queue"]
+  K --> L["Optional SMTP Send"]
+  F --> M["Audit Log"]
+  J --> M
+  L --> M
 ```
 
-## Technical Stack And Decision Log
+## Technical Decisions
 
-See `docs/technical_stack_decision_log.md`.
+- **LLM:** Gemini API, because it has a free-tier path and is enough for professional email drafting.
+- **Fallback:** deterministic templates, so the demo works even if API quota is exhausted.
+- **Agent workflow:** LangGraph-capable workflow, because the process maps cleanly to nodes like ingestion, escalation, generation, validation, and logging.
+- **Validation:** Pydantic models for invoice records, escalation decisions, email drafts, and audit entries.
+- **Storage:** JSON/CSV for readable sample outputs, SQLite for audit logs and LLM cache.
+- **UI:** Streamlit for a simple review dashboard.
+- **Observability:** local trace file by default, optional LangSmith for hosted tracing.
 
 ## Prompt Design
 
-See `docs/prompt_design_summary.md`.
+The prompt is designed to keep the LLM focused on wording only. The model does not decide invoice status, escalation stage, amount, or due date.
 
-## Observability
+Prompt guardrails:
 
-Local tracing is enabled through `ENABLE_LOCAL_TRACING=true`, which writes `outputs/trace_events.json`.
+- use only validated invoice facts
+- return structured JSON
+- include all required personalization fields
+- do not invent payment terms or client details
+- match the tone selected by deterministic escalation logic
 
-Optional hosted tracing:
-
-- LangSmith: set `LANGSMITH_TRACING=true`, `LANGSMITH_API_KEY`, and `LANGSMITH_PROJECT`.
-
-The app continues to run if hosted tracing packages or credentials are missing.
+Full local prompt files are ignored by Git to avoid exposing internal prompt iterations.
 
 ## Security Mitigations
 
-See `docs/security_mitigations.md`.
+| Risk | Mitigation |
+|---|---|
+| Prompt injection | Validate inputs and constrain the LLM to supplied invoice facts |
+| Data privacy | Use local processing and fake sample data |
+| API key exposure | Keep `.env` ignored; provide `.env.example` only |
+| Hallucination | Validate generated emails for required invoice fields |
+| Accidental emails | Keep `DRY_RUN=true` by default |
+| Unauthorized sending | Require approval before real sends |
+| Email spoofing | Real sending requires verified SMTP/domain setup |
+| Hosted tracing privacy | LangSmith is opt-in; local tracing is default |
+
+## Outputs
+
+After running the agent:
+
+```text
+outputs/sample_email_log.json
+outputs/sample_email_log.csv
+outputs/audit_log.sqlite
+outputs/trace_events.json
+outputs/approvals.json
+```
 
 ## Tests
 
@@ -169,13 +207,18 @@ See `docs/security_mitigations.md`.
 pytest
 ```
 
-The tests verify escalation-stage boundaries, the 30+ day escalation cap, and required email personalization checks.
+Tests cover:
 
-## Demo Script
+- escalation stage boundaries
+- 30+ day manual review behavior
+- required email personalization checks
+
+## Demo Flow
 
 1. Show `data/sample_invoices.csv`.
 2. Run `python -m src.main --today 2026-05-14`.
 3. Open `outputs/sample_email_log.json`.
-4. Show Stage 1 through Stage 4 generated dry-run emails.
-5. Show the 30+ day invoice marked `ESCALATED` with no email body.
-6. Optionally open the Streamlit dashboard.
+4. Show Stage 1-4 dry-run email drafts.
+5. Show the 30+ day invoice marked `ESCALATED`.
+6. Open the Streamlit dashboard with `streamlit run app.py`.
+
