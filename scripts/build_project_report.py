@@ -282,7 +282,7 @@ def build() -> None:
 
     document.add_heading("6. Implementation Summary", level=1)
     for item in [
-        "The main folder is named finance agent as required for this project.",
+        "The GitHub repository is intended to be named finance-agent, with project files placed at the repository root for a clean submission view.",
         "The CLI entry point is python -m src.main --today 2026-05-14.",
         "The sample dataset includes Stage 1, Stage 2, Stage 3, Stage 4, escalation flag, and not-overdue records.",
         "The app uses DRY_RUN=true by default, so generated emails are logged but not sent.",
@@ -329,7 +329,7 @@ def build() -> None:
 
     document.add_heading("9. Deliverables", level=1)
     for item in [
-        "Source code and documentation in the finance agent project folder.",
+        "Source code and documentation placed at the repository root for a clean GitHub submission.",
         "README with setup, run instructions, architecture, tech decisions, and security notes.",
         "Sample input dataset in data/sample_invoices.csv.",
         "Sample output logs in outputs/sample_email_log.json and outputs/sample_email_log.csv.",

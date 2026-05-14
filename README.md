@@ -34,17 +34,16 @@ This repository implements **Task 2: Finance Credit Follow-Up Email Agent** from
 ## Project Structure
 
 ```text
-finance agent/
-  app.py
-  README.md
-  requirements.txt
-  .env.example
-  .gitignore
-  data/sample_invoices.csv
-  docs/
-  outputs/
-  src/
-  tests/
+app.py
+README.md
+requirements.txt
+.env.example
+.gitignore
+data/sample_invoices.csv
+docs/
+outputs/
+src/
+tests/
 ```
 
 The local `prompts/` folder is intentionally ignored by Git. The prompt strategy and iterations are documented in `docs/prompt_design_summary.md` without committing full private prompt files.
@@ -52,7 +51,6 @@ The local `prompts/` folder is intentionally ignored by Git. The prompt strategy
 ## Setup
 
 ```bash
-cd "finance agent"
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
